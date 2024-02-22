@@ -21,11 +21,16 @@ public class Flight
 
     public FlightStatus Status { get; set; }
 
-    public ICollection<Passenger> Passengers { get; set; } = new List<Passenger>();
+    public ICollection<Passenger> Passengers { get; private set; } = new List<Passenger>();
 
     public List<PassengerFlight> PassengerFlights { get; set; }
 
     public Airport From { get; set; }
 
     public Airport To { get; set; }
+
+    public void AddPassengerToFlight(Passenger passenger)
+    {
+        Passengers.Add(passenger);
+    }
 }
