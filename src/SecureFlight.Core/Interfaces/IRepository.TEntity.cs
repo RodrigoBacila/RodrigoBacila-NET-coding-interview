@@ -17,4 +17,6 @@ public interface IRepository<TEntity>
     Task<TEntity> GetByIdAsync(params object[] keyValues);
 
     Task<int> SaveChangesAsync();
+
+    bool Delete(TEntity entity);
 }

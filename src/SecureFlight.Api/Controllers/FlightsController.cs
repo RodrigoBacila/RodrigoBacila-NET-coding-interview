@@ -20,4 +20,22 @@ public class FlightsController(IService<Flight> flightService, IMapper mapper)
         var flights = await flightService.GetAllAsync();
         return MapResultToDataTransferObject<IReadOnlyList<Flight>, IReadOnlyList<FlightDataTransferObject>>(flights);
     }
+
+    [HttpGet("/get-flight-by-origin")]
+    [ProducesResponseType(typeof(IEnumerable<FlightDataTransferObject>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponseActionResult))]
+    public async Task<IActionResult> GetFlightByOrigin([FromQuery] string originAirport)
+    {
+        var flights = await flightService.FilterAsync(flight => flight.OriginAirport.Equals(originAirport, StringComparison.CurrentCultureIgnoreCase));
+        return MapResultToDataTransferObject<IReadOnlyList<Flight>, IReadOnlyList<FlightDataTransferObject>>(flights);
+    }
+
+    [HttpGet("/get-flight-by-destination")]
+    [ProducesResponseType(typeof(IEnumerable<FlightDataTransferObject>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponseActionResult))]
+    public async Task<IActionResult> GetFlightByDestination([FromQuery] string destinationAirport)
+    {
+        var flights = await flightService.FilterAsync(flight => flight.DestinationAirport.Equals(destinationAirport, StringComparison.CurrentCultureIgnoreCase));
+        return MapResultToDataTransferObject<IReadOnlyList<Flight>, IReadOnlyList<FlightDataTransferObject>>(flights);
+    }
 }
