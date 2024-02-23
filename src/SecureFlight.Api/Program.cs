@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SecureFlight.Api.Utils;
+using SecureFlight.Core.Entities;
 using SecureFlight.Core.Interfaces;
 using SecureFlight.Core.Services;
 using SecureFlight.Infrastructure;
@@ -23,8 +24,16 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ErrorResultFilter)));
 
 builder.Services.AddDbContext<SecureFlightDbContext>(options => options.UseInMemoryDatabase("SecureFlight"));
-builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped(typeof(IService<>), typeof(BaseService<>));
+
+builder.Services.AddScoped(typeof(IRepository<Flight>), typeof(FlightRepository));
+builder.Services.AddScoped(typeof(IService<Flight>), typeof(FlightService));
+
+builder.Services.AddScoped(typeof(IRepository<Passenger>), typeof(PassengerRepository));
+builder.Services.AddScoped(typeof(IService<Passenger>), typeof(PassengerService));
+
+builder.Services.AddScoped(typeof(IRepository<Airport>), typeof(AirportRepository));
+builder.Services.AddScoped(typeof(IService<Airport>), typeof(AirportService));
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();

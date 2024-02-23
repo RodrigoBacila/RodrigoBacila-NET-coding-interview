@@ -25,8 +25,11 @@ public class BaseRepository<TEntity>(SecureFlightDbContext context)
     public TEntity Update(TEntity entity)
     {
         var entry = context.Entry(entity);
+
         entry.State = EntityState.Modified;
+
         context.SaveChanges();
+
         return entity;
     }
 
@@ -36,4 +39,15 @@ public class BaseRepository<TEntity>(SecureFlightDbContext context)
     }
 
     public async Task<int> SaveChangesAsync() => await context.SaveChangesAsync();
+
+    public bool Delete(TEntity entity)
+    {
+        var entry = context.Entry(entity);
+
+        entry.State = EntityState.Deleted;
+
+        context.SaveChanges();
+
+        return true;
+    }
 }

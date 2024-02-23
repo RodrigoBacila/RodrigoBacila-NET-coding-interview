@@ -1,7 +1,5 @@
+using System.Linq;
 using System.Threading.Tasks;
-using Moq;
-using SecureFlight.Core.Entities;
-using SecureFlight.Core.Interfaces;
 using SecureFlight.Infrastructure.Repositories;
 using Xunit;
 
@@ -15,14 +13,23 @@ namespace SecureFlight.Test
             //Arrange
             var testingContext = new SecureFlightDatabaseTestContext();
             testingContext.CreateDatabase();
-            var repository = new BaseRepository<Airport>(testingContext);
-            var mockRepository = new Mock<IRepository<Airport>>();
-            //TODO: Add test code here
+            var repository = new AirportRepository(testingContext);
+
             //Act
-            
-            
+            var currentAirportsData = await repository.GetAllAsync();
+            var selectedAirport = currentAirportsData.FirstOrDefault(airportData => airportData.Code == "JFK");
+
+            var newAirportName = "New JFK Airport Name";
+            selectedAirport.Name = newAirportName;
+
+            repository.Update(selectedAirport);
+
+            var modifiedAirportDataList = await repository.FilterAsync(airportData => airportData.Code == selectedAirport.Code);
+            var modifiedAirportData = modifiedAirportDataList.FirstOrDefault();
+
             //Assert
-            
+            Assert.True(modifiedAirportData.Name.Equals(newAirportName));
+
             testingContext.DisposeDatabase();
         }
     }

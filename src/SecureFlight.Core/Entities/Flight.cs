@@ -21,7 +21,7 @@ public class Flight
 
     public FlightStatus Status { get; set; }
 
-    public ICollection<Passenger> Passengers { get; private set; } = new List<Passenger>();
+    public List<Passenger> Passengers { get; private set; } = new List<Passenger>();
 
     public List<PassengerFlight> PassengerFlights { get; set; }
 
@@ -29,8 +29,13 @@ public class Flight
 
     public Airport To { get; set; }
 
-    public void AddPassengerToFlight(Passenger passenger)
+    public void AddPassengerToFlight(Passenger passengerToAdd)
     {
-        Passengers.Add(passenger);
+        Passengers.Add(passengerToAdd);
+    }
+
+    public void RemovePassengerFromFlight(Passenger passengerToRemove)
+    {
+        Passengers.RemoveAll(passenger => passenger.Id == passengerToRemove.Id);
     }
 }
